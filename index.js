@@ -9,7 +9,8 @@ import orderRouter from './routes/orderRoute.js';
 
 //import dns from 'dns';
 //dns.setServers(['8.8.8.8', '1.1.1.1']);
-
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.use((req, res, next) => {
     const token = tokenString.replace("Bearer ", "");
     //console.log(token);
 
-    jwt.verify(token, "yuwa@2004", (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (decoded != null){
         //console.log(decoded);
         req.user = decoded;
@@ -40,7 +41,7 @@ app.use((req, res, next) => {
 })
 
 
-mongoose.connect("mongodb+srv://admin:123@cluster0.qkl5uv4.mongodb.net/?appName=Cluster0").then(()=>{
+mongoose.connect(process.env.MONGO_URI).then(()=>{
   console.log('connected to database');})
   .catch((error) => {
     console.log("connection failed:", error.message);
